@@ -8,6 +8,8 @@ public class hh {
         Cube now2 = new Cube(3);
 
         System.out.println(now1);
+        now1.rotateBrink(Cube.CubeName.FRONT,2,1, true);
+        now2.rotateBrink(Cube.CubeName.FRONT,2,1, true);
         //now.toStringOneBrink(Cube.CubeName.BACK);
 //        now.rotateBrink(Cube.CubeName.FRONT, 1, Cube.ClockWise.TRUE);
         now1.rotateCubeTo(Cube.Rotates.UP);
@@ -15,7 +17,7 @@ public class hh {
 //        now.rotateBrink(Cube.CubeName.UP, 1, Cube.ClockWise.TRUE);
 //        now.rotateBrink(Cube.CubeName.RIGHT, 1, Cube.ClockWise.TRUE);
 //        System.out.println(Arrays.deepToString(now.getCubeNow()));
-
+        System.out.println(now1);
 
 //        System.out.println(Arrays.deepToString(now.getCubeNow()));
         System.out.println(now1.equals(now2));
