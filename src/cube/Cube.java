@@ -18,7 +18,8 @@ public final class Cube {
             ANSI_GREEN + "gr",
             ANSI_PURPLE + "pu",
             ANSI_BLUE + "bl",
-            ANSI_YELLOW + "ye"};
+            ANSI_YELLOW + "ye"
+    };
 
     private final int sizeCube;
 
@@ -124,7 +125,7 @@ public final class Cube {
                         }
                     }
                 } else {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateLeft(this.cubeNow[CubeName.FRONT.num]); // Поворот самой грани
                         if (now == 1) rotateRight(this.cubeNow[CubeName.BACK.num]);
                         for (int i = 0; i < sizeCube; i++) {
@@ -141,26 +142,26 @@ public final class Cube {
 
             case RIGHT: {
                 if (clock) {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateRight(this.cubeNow[CubeName.RIGHT.num]);
                         if (now == sizeCube) rotateLeft(this.cubeNow[CubeName.LEFT.num]);
                         for (int i = 0; i < sizeCube; i++) {
-                            int x = this.cubeNow[CubeName.DOWN.num][i][now - 1];
-                            this.cubeNow[CubeName.DOWN.num][i][sizeCube - now] = this.cubeNow[CubeName.BACK.num][i][now - 1];
-                            this.cubeNow[CubeName.BACK.num][i][now - 1] = this.cubeNow[CubeName.UP.num][i][sizeCube - now];
+                            int x = this.cubeNow[CubeName.DOWN.num][i][sizeCube - now];
+                            this.cubeNow[CubeName.DOWN.num][i][sizeCube - now] = this.cubeNow[CubeName.BACK.num][sizeCube - i - 1][now - 1];
+                            this.cubeNow[CubeName.BACK.num][sizeCube - i - 1][now - 1] = this.cubeNow[CubeName.UP.num][i][sizeCube - now];
                             this.cubeNow[CubeName.UP.num][i][sizeCube - now] = cubeNow[CubeName.FRONT.num][i][sizeCube - now];
                             cubeNow[CubeName.FRONT.num][i][sizeCube - now] = x;
                         }
                     }
                 } else {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateLeft(this.cubeNow[CubeName.RIGHT.num]);
                         if (now == sizeCube) rotateRight(this.cubeNow[CubeName.LEFT.num]);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = cubeNow[CubeName.FRONT.num][i][sizeCube - now];
                             cubeNow[CubeName.FRONT.num][i][sizeCube - now] = this.cubeNow[CubeName.UP.num][i][sizeCube - now];
-                            this.cubeNow[CubeName.UP.num][i][sizeCube - now] = this.cubeNow[CubeName.BACK.num][i][now - 1];
-                            this.cubeNow[CubeName.BACK.num][i][now - 1] = this.cubeNow[CubeName.DOWN.num][i][sizeCube - now];
+                            this.cubeNow[CubeName.UP.num][i][sizeCube - now] = this.cubeNow[CubeName.BACK.num][sizeCube - i -1][now - 1];
+                            this.cubeNow[CubeName.BACK.num][sizeCube - i - 1][now - 1] = this.cubeNow[CubeName.DOWN.num][i][sizeCube - now];
                             this.cubeNow[CubeName.DOWN.num][i][sizeCube - now] = x;
                         }
                     }
@@ -170,26 +171,26 @@ public final class Cube {
 
             case LEFT: {
                 if (clock) {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateRight(cubeNow[CubeName.LEFT.num]);
                         if (now == sizeCube) rotateLeft(cubeNow[CubeName.RIGHT.num]);
                         for (int i = 0; i < sizeCube; i++) {
-                            int x = cubeNow[CubeName.FRONT.num][i][sizeCube - now];
+                            int x = cubeNow[CubeName.FRONT.num][i][now - 1];
                             cubeNow[CubeName.FRONT.num][i][now - 1] = cubeNow[CubeName.UP.num][i][now - 1];
-                            cubeNow[CubeName.UP.num][i][now - 1] = cubeNow[CubeName.BACK.num][i][sizeCube - now];
-                            cubeNow[CubeName.BACK.num][i][sizeCube - now] = cubeNow[CubeName.DOWN.num][i][now - 1];
+                            cubeNow[CubeName.UP.num][i][now - 1] = cubeNow[CubeName.BACK.num][sizeCube - i - 1][sizeCube - now];
+                            cubeNow[CubeName.BACK.num][sizeCube - i - 1][sizeCube - now] = cubeNow[CubeName.DOWN.num][i][now - 1];
                             cubeNow[CubeName.DOWN.num][i][now - 1] = x;
                         }
                     }
                 } else {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateLeft(cubeNow[CubeName.LEFT.num]);
                         if (now == sizeCube) rotateRight(cubeNow[CubeName.RIGHT.num]);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = cubeNow[CubeName.FRONT.num][i][now - 1];
                             cubeNow[CubeName.FRONT.num][i][now - 1] = cubeNow[CubeName.DOWN.num][i][now - 1];
-                            cubeNow[CubeName.DOWN.num][i][now - 1] = cubeNow[CubeName.BACK.num][i][sizeCube - now];
-                            cubeNow[CubeName.BACK.num][i][sizeCube - now] = cubeNow[CubeName.UP.num][i][now - 1];
+                            cubeNow[CubeName.DOWN.num][i][now - 1] = cubeNow[CubeName.BACK.num][sizeCube - i - 1][sizeCube - now];
+                            cubeNow[CubeName.BACK.num][sizeCube - i - 1][sizeCube - now] = cubeNow[CubeName.UP.num][i][now - 1];
                             cubeNow[CubeName.UP.num][i][now - 1] = x;
                         }
                     }
@@ -199,7 +200,7 @@ public final class Cube {
 
             case UP: {
                 if (clock) {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateRight(cubeNow[CubeName.UP.num]);
                         if (now == sizeCube) rotateLeft(cubeNow[CubeName.DOWN.num]);
                         for (int i = 0; i < sizeCube; i++) {
@@ -211,7 +212,7 @@ public final class Cube {
                         }
                     }
                 } else {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateLeft(cubeNow[CubeName.UP.num]);
                         if (now == sizeCube) rotateRight(cubeNow[CubeName.DOWN.num]);
                         for (int i = 0; i < sizeCube; i++) {
@@ -228,7 +229,7 @@ public final class Cube {
 
             case DOWN: {
                 if (clock) {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateRight(cubeNow[CubeName.DOWN.num]);
                         if (now == sizeCube) rotateLeft(cubeNow[CubeName.UP.num]);
                         for (int i = 0; i < sizeCube; i++) {
@@ -240,7 +241,7 @@ public final class Cube {
                         }
                     }
                 } else {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateLeft(cubeNow[CubeName.DOWN.num]);
                         if (now == sizeCube) rotateRight(cubeNow[CubeName.UP.num]);
                         for (int i = 0; i < sizeCube; i++) {
@@ -257,19 +258,19 @@ public final class Cube {
 
             case BACK: {
                 if (clock) {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateRight(cubeNow[CubeName.BACK.num]);
                         if (now == sizeCube) rotateLeft(cubeNow[CubeName.FRONT.num]);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = cubeNow[CubeName.DOWN.num][sizeCube - now][i];
-                            cubeNow[CubeName.DOWN.num][sizeCube - now][i] = cubeNow[CubeName.LEFT.num][i][sizeCube - now];
-                            cubeNow[CubeName.LEFT.num][i][sizeCube - now] = cubeNow[CubeName.UP.num][sizeCube - now][i];
-                            cubeNow[CubeName.UP.num][sizeCube - now][i] = cubeNow[CubeName.RIGHT.num][i][sizeCube - now];
+                            cubeNow[CubeName.DOWN.num][sizeCube - now][i] = cubeNow[CubeName.LEFT.num][i][now - 1];
+                            cubeNow[CubeName.LEFT.num][i][now - 1] = cubeNow[CubeName.UP.num][now - 1][i];
+                            cubeNow[CubeName.UP.num][now - 1][i] = cubeNow[CubeName.RIGHT.num][i][sizeCube - now];
                             cubeNow[CubeName.RIGHT.num][i][sizeCube - now] = x;
                         }
                     }
                 } else {
-                    for (int now = startIndex; now < endIndex; now++) {
+                    for (int now = startIndex; now <= endIndex; now++) {
                         if (now == 1) rotateLeft(cubeNow[CubeName.BACK.num]);
                         if (now == sizeCube) rotateRight(cubeNow[CubeName.FRONT.num]);
                         for (int i = 0; i < sizeCube; i++) {
@@ -289,11 +290,11 @@ public final class Cube {
     public void rotateCubeTo(Rotates move) {  // Поворот куба
         switch (move) {
             case DOWN: {
-                int[][] x = this.cubeNow[CubeName.FRONT.num];
-                this.cubeNow[CubeName.FRONT.num] = this.cubeNow[CubeName.DOWN.num];
-                this.cubeNow[CubeName.DOWN.num] = this.cubeNow[CubeName.BACK.num];
-                this.cubeNow[CubeName.BACK.num] = this.cubeNow[CubeName.UP.num];
-                this.cubeNow[CubeName.UP.num] = x;
+                int x = CubeName.FRONT.num;
+                CubeName.FRONT.num = CubeName.DOWN.num;
+                CubeName.DOWN.num = CubeName.BACK.num;
+                CubeName.BACK.num = CubeName.UP.num;
+                CubeName.UP.num = x;
 
                 rotateLeft(this.cubeNow[CubeName.LEFT.num]); //90
 
@@ -307,11 +308,11 @@ public final class Cube {
                 break;
             }
             case RIGHT: {
-                int[][] x = this.cubeNow[CubeName.FRONT.num];
-                this.cubeNow[CubeName.FRONT.num] = this.cubeNow[CubeName.RIGHT.num];
-                this.cubeNow[CubeName.RIGHT.num] = this.cubeNow[CubeName.BACK.num];
-                this.cubeNow[CubeName.BACK.num] = this.cubeNow[CubeName.LEFT.num];
-                this.cubeNow[CubeName.LEFT.num] = x;
+                int x = CubeName.FRONT.num;
+                CubeName.FRONT.num = CubeName.RIGHT.num;
+                CubeName.RIGHT.num = CubeName.BACK.num;
+                CubeName.BACK.num = CubeName.LEFT.num;
+                CubeName.LEFT.num = x;
 
                 rotateRight(this.cubeNow[CubeName.UP.num]); //90
 
@@ -319,11 +320,11 @@ public final class Cube {
                 break;
             }
             case LEFT: {
-                int[][] x = this.cubeNow[CubeName.FRONT.num];
-                this.cubeNow[CubeName.FRONT.num] = this.cubeNow[CubeName.LEFT.num];
-                this.cubeNow[CubeName.LEFT.num] = this.cubeNow[CubeName.BACK.num];
-                this.cubeNow[CubeName.BACK.num] = this.cubeNow[CubeName.RIGHT.num];
-                this.cubeNow[CubeName.RIGHT.num] = x;
+                int x = CubeName.FRONT.num;
+                CubeName.FRONT.num = CubeName.LEFT.num;
+                CubeName.LEFT.num = CubeName.BACK.num;
+                CubeName.BACK.num = CubeName.RIGHT.num;
+                CubeName.RIGHT.num = x;
 
                 rotateLeft(this.cubeNow[CubeName.UP.num]); //90
 
@@ -331,11 +332,11 @@ public final class Cube {
                 break;
             }
             case UP: {
-                int[][] x = this.cubeNow[CubeName.FRONT.num];
-                this.cubeNow[CubeName.FRONT.num] = this.cubeNow[CubeName.UP.num];
-                this.cubeNow[CubeName.UP.num] = this.cubeNow[CubeName.BACK.num];
-                this.cubeNow[CubeName.BACK.num] = this.cubeNow[CubeName.DOWN.num];
-                this.cubeNow[CubeName.DOWN.num] = x;
+                int x = CubeName.FRONT.num;
+                CubeName.FRONT.num = CubeName.UP.num;
+                CubeName.UP.num = CubeName.BACK.num;
+                CubeName.BACK.num = CubeName.DOWN.num;
+                CubeName.DOWN.num = x;
 
                 rotateRight(this.cubeNow[CubeName.LEFT.num]); //90
 
@@ -349,11 +350,11 @@ public final class Cube {
                 break;
             }
             case FRONT_RIGHT: {
-                int[][] x = this.cubeNow[CubeName.DOWN.num];
-                this.cubeNow[CubeName.DOWN.num] = this.cubeNow[CubeName.RIGHT.num];
-                this.cubeNow[CubeName.RIGHT.num] = this.cubeNow[CubeName.UP.num];
-                this.cubeNow[CubeName.UP.num] = this.cubeNow[CubeName.LEFT.num];
-                this.cubeNow[CubeName.LEFT.num] = x;
+                int x = CubeName.DOWN.num;
+                CubeName.DOWN.num = CubeName.RIGHT.num;
+                CubeName.RIGHT.num = CubeName.UP.num;
+                CubeName.UP.num = CubeName.LEFT.num;
+                CubeName.LEFT.num = x;
 
                 rotateRight(this.cubeNow[CubeName.FRONT.num]); //90
 
@@ -369,11 +370,11 @@ public final class Cube {
                 break;
             }
             case FRONT_LEFT: {
-                int[][] x = this.cubeNow[CubeName.DOWN.num];
-                this.cubeNow[CubeName.DOWN.num] = this.cubeNow[CubeName.LEFT.num];
-                this.cubeNow[CubeName.LEFT.num] = this.cubeNow[CubeName.UP.num];
-                this.cubeNow[CubeName.UP.num] = this.cubeNow[CubeName.RIGHT.num];
-                this.cubeNow[CubeName.RIGHT.num] = x;
+                int x = CubeName.DOWN.num;
+                CubeName.DOWN.num = CubeName.LEFT.num;
+                CubeName.LEFT.num = CubeName.UP.num;
+                CubeName.UP.num = CubeName.RIGHT.num;
+                CubeName.RIGHT.num = x;
 
                 rotateLeft(this.cubeNow[CubeName.FRONT.num]); //90
 
