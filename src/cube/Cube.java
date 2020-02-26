@@ -432,7 +432,6 @@ public final class Cube {
                         res1 &= res2;
                     }
                     coincides |=res1;
-
                     if (coincides) return true;
                     other.rotateCubeTo(Rotates.LEFT);
                 }
