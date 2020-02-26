@@ -1,7 +1,8 @@
 package cube;
 
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
+
+
 import static org.junit.Assert.*;
 
 public class CubeTest {
@@ -10,101 +11,58 @@ public class CubeTest {
         Cube real = new Cube(3);
         Cube now = new Cube(3);
         real.setSide(Cube.CubeName.FRONT, new int[][]{
-                {5, 4, 4},
-                {5, 4, 4},
-                {5, 3, 3}
+                {5, 1, 5},
+                {1, 1, 2},
+                {0, 0, 2}
         });
         real.setSide(Cube.CubeName.DOWN, new int[][]{
-                {3, 0, 0},
-                {4, 0, 0},
-                {4, 0, 0}
+                {4, 4, 5},
+                {3, 0, 4},
+                {3, 3, 3}
         });
         real.setSide(Cube.CubeName.LEFT, new int[][]{
-                {2, 3, 3},
-                {2, 3, 3},
-                {2, 3, 3}
+                {2, 5, 3},
+                {5, 4, 5},
+                {0, 2, 1}
         });
         real.setSide(Cube.CubeName.UP, new int[][]{
-                {2, 5, 5},
-                {2, 5, 5},
-                {1, 5, 5}
+                {1, 0, 2},
+                {2, 5, 1},
+                {2, 0, 1}
         });
         real.setSide(Cube.CubeName.RIGHT, new int[][]{
-                {1, 1, 1},
-                {1, 1, 1},
-                {4, 4, 4}
+                {4, 4, 0},
+                {1, 2, 2},
+                {1, 5, 5}
         });
         real.setSide(Cube.CubeName.BACK, new int[][]{
-                {2, 2, 0},
-                {2, 2, 0},
-                {1, 1, 0}
+                {3, 3, 0},
+                {0, 3, 3},
+                {4, 4, 4}
         });
-        now.rotateBrink(Cube.CubeName.FRONT, 1, 1, false);
-        now.rotateBrink(Cube.CubeName.LEFT, 1, 1, false);
-//        now.rotateBrink(Cube.CubeName.RIGHT, 1, 1, false);
-//        now.rotateBrink(Cube.CubeName.DOWN, 1, 1, false);
-//        now.rotateBrink(Cube.CubeName.UP, 1, 1, false);
+
+        now.rotateBrink(Cube.CubeName.RIGHT, 1, 1, true);
+        now.rotateBrink(Cube.CubeName.LEFT, 1, 2, true);
+        now.rotateBrink(Cube.CubeName.UP, 1, 1, true);
+        now.rotateBrink(Cube.CubeName.BACK, 1, 1, false);
+        now.rotateBrink(Cube.CubeName.FRONT, 1, 1, true);
         now.rotateCubeTo(Cube.Rotates.UP);
-//        now.rotateBrink(Cube.CubeName.FRONT, 1, 1, true);
-//        now.rotateBrink(Cube.CubeName.LEFT, 1, 1, true);
-//        now.rotateBrink(Cube.CubeName.RIGHT, 1, 1, true);
-//        now.rotateBrink(Cube.CubeName.DOWN, 1, 1, true);
-//        now.rotateBrink(Cube.CubeName.UP, 1, 1, true);
-//        now.rotateCubeTo(Cube.Rotates.RIGHT);
+        now.rotateBrink(Cube.CubeName.FRONT, 1, 1, false);
+        now.rotateBrink(Cube.CubeName.RIGHT, 1, 1, false);
+        now.rotateBrink(Cube.CubeName.DOWN, 1, 1, true);
+        now.rotateBrink(Cube.CubeName.UP, 1, 1, false);
+        now.rotateBrink(Cube.CubeName.LEFT, 1, 1, false);
+        now.rotateBrink(Cube.CubeName.FRONT, 1, 2, true);
+        now.rotateCubeTo(Cube.Rotates.RIGHT);
+        now.rotateCubeTo(Cube.Rotates.RIGHT);
+        now.rotateCubeTo(Cube.Rotates.UP);
+        now.rotateCubeTo(Cube.Rotates.LEFT);
+        System.out.println(real);
         System.out.println(now);
+//        System.out.println(real.hashCode());
+//        System.out.println(now.hashCode());
+        System.out.println(now.equals(real));
         assertEquals(now, real);
     }
 
-    @Test
-    public void moveFace() {
-        Cube cubePROGRAM = new Cube(3);
-        Cube cubeREAL = new Cube(3);
-        cubeREAL.setSide(Cube.CubeName.FRONT, new int[][]{
-                {4, 3, 3},
-                {0, 5, 0},
-                {3, 4, 4}
-        });
-        cubeREAL.setSide(Cube.CubeName.BACK, new int[][]{
-                {1, 1, 2},
-                {1, 0, 2},
-                {1, 2, 5}
-        });
-        cubeREAL.setSide(Cube.CubeName.RIGHT, new int[][]{
-                {5, 4, 4},
-                {3, 3, 0},
-                {5, 3, 0}
-        });
-        cubeREAL.setSide(Cube.CubeName.LEFT, new int[][]{
-                {2, 0, 1},
-                {2, 1, 1},
-                {2, 1, 0}
-        });
-        cubeREAL.setSide(Cube.CubeName.UP, new int[][]{
-                {5, 5, 3},
-                {4, 4, 3},
-                {0, 2, 2}
-        });
-        cubeREAL.setSide(Cube.CubeName.DOWN, new int[][]{
-                {4, 5, 1},
-                {5, 2, 5},
-                {0, 4, 3}
-        });
-        cubePROGRAM.rotateBrink(Cube.CubeName.RIGHT, 1, 1, true);
-        cubePROGRAM.rotateBrink(Cube.CubeName.LEFT, 1, 2, true);
-        cubePROGRAM.rotateBrink(Cube.CubeName.UP, 1, 1, true);
-        cubePROGRAM.rotateBrink(Cube.CubeName.BACK, 1, 1, false);
-        cubePROGRAM.rotateBrink(Cube.CubeName.FRONT, 1, 1, true);
-        cubePROGRAM.rotateCubeTo(Cube.Rotates.UP);
-        cubePROGRAM.rotateBrink(Cube.CubeName.FRONT, 1, 1, false);
-        cubePROGRAM.rotateBrink(Cube.CubeName.RIGHT, 1, 1, false);
-        cubePROGRAM.rotateBrink(Cube.CubeName.DOWN, 1, 1, true);
-        cubePROGRAM.rotateBrink(Cube.CubeName.UP, 1, 1, false);
-        cubePROGRAM.rotateBrink(Cube.CubeName.LEFT, 1, 1, false);
-        cubePROGRAM.rotateBrink(Cube.CubeName.FRONT, 1, 2, true);
-        cubePROGRAM.rotateCubeTo(Cube.Rotates.RIGHT);
-        cubePROGRAM.rotateCubeTo(Cube.Rotates.RIGHT);
-        cubePROGRAM.rotateCubeTo(Cube.Rotates.UP);
-        cubePROGRAM.rotateCubeTo(Cube.Rotates.LEFT);
-        assertEquals(cubePROGRAM, cubeREAL);
-    }
 }
