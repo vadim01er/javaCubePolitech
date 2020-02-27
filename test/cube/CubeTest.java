@@ -10,37 +10,37 @@ import static org.junit.Assert.*;
 public class CubeTest {
     @Test
     public void rotateBrink() {
-        Cube real = new Cube(3);
         Cube now = new Cube(3);
-        real.setSide(Cube.CubeName.FRONT, new int[][]{
-                {1, 1, 3},
-                {2, 1, 2},
-                {2, 0, 3}
-        });
-        real.setSide(Cube.CubeName.DOWN, new int[][]{
-                {1, 3, 5},
-                {5, 0, 4},
-                {2, 3, 1}
-        });
-        real.setSide(Cube.CubeName.LEFT, new int[][]{
-                {2, 0, 4},
-                {0, 4, 5},
-                {0, 4, 5}
-        });
-        real.setSide(Cube.CubeName.UP, new int[][]{
-                {1, 1, 4},
-                {1, 5, 3},
-                {5, 5, 4}
-        });
-        real.setSide(Cube.CubeName.RIGHT, new int[][]{
-                {0, 5, 5},
-                {1, 2, 3},
-                {2, 0, 0}
-        });
-        real.setSide(Cube.CubeName.BACK, new int[][]{
-                {3, 4, 0},
-                {2, 3, 2},
-                {4, 4, 3}
+        Cube real = new Cube(3, new int[][][]{
+                {
+                        {1, 1, 3},
+                        {2, 1, 2},
+                        {2, 0, 3}
+                },
+                {
+                        {1, 3, 5},
+                        {5, 0, 4},
+                        {2, 3, 1}
+                },
+                {
+                        {2, 0, 4},
+                        {0, 4, 5},
+                        {0, 4, 5}
+                },
+                {
+                        {1, 1, 4},
+                        {1, 5, 3},
+                        {5, 5, 4}
+                },
+                {       {0, 5, 5},
+                        {1, 2, 3},
+                        {2, 0, 0}
+                },
+                {
+                        {3, 4, 0},
+                        {2, 3, 2},
+                        {4, 4, 3}
+                }
         });
         now.rotateBrink(Cube.CubeName.FRONT, 1, 1, true);
         now.rotateBrink(Cube.CubeName.RIGHT, 1, 1, true);
@@ -57,9 +57,9 @@ public class CubeTest {
         now.rotateBrink(Cube.CubeName.UP, 1, 1, false);
         now.rotateBrink(Cube.CubeName.LEFT, 1, 1, false);
         now.rotateCubeTo(Cube.Rotates.RIGHT);
-        now.rotateCubeTo(Cube.Rotates.RIGHT);
-        now.rotateCubeTo(Cube.Rotates.UP);
-        now.rotateCubeTo(Cube.Rotates.LEFT);
+//        now.rotateCubeTo(Cube.Rotates.RIGHT);
+//        now.rotateCubeTo(Cube.Rotates.UP);
+//        now.rotateCubeTo(Cube.Rotates.LEFT);
 //        System.out.println(real);
 //        System.out.println(Arrays.deepToString(now.getCubeNow()));
 //        System.out.println(real.hashCode());
