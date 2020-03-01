@@ -57,9 +57,9 @@ public class CubeTest {
         now.rotateBrink(Cube.CubeName.UP, 1, 1, false);
         now.rotateBrink(Cube.CubeName.LEFT, 1, 1, false);
         now.rotateCubeTo(Cube.Rotates.RIGHT);
-//        now.rotateCubeTo(Cube.Rotates.RIGHT);
-//        now.rotateCubeTo(Cube.Rotates.UP);
-//        now.rotateCubeTo(Cube.Rotates.LEFT);
+        now.rotateCubeTo(Cube.Rotates.RIGHT);
+        now.rotateCubeTo(Cube.Rotates.UP);
+        now.rotateCubeTo(Cube.Rotates.LEFT);
 //        System.out.println(real);
 //        System.out.println(Arrays.deepToString(now.getCubeNow()));
 //        System.out.println(real.hashCode());
