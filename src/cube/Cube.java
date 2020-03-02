@@ -57,7 +57,6 @@ public final class Cube {
         }
     }
 
-
      private void rotateLeft(CubeName ... name) { // Поворот квадратной матрицы влево
         int size = sizeCube;
          for (CubeName cubename: name) {
