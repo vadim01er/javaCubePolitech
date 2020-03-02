@@ -25,57 +25,70 @@ public final class Cube {
 
     private final int[][][] cubeNow;
 
-    public Cube(int size) { // Конструктор
+    Cube(int size) { // Конструктор
         if (size < 0) throw new IllegalArgumentException("Wrong SIZE!");
         this.sizeCube = size;
         this.cubeNow = new int[6][size][size];
-        int m = 0;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < size; j++) {
                 cubeNow[i][j] = new int[size];
                 for (int k = 0; k < size; k++) {
-                    cubeNow[i][j][k] = m;
+                    cubeNow[i][j][k] = i;
                 }
             }
-            m++;
         }
     }
 
-    public Cube(int size, int[][][] cube) {
+    Cube(int size, int[][][] cube) {
         if (size < 0) throw new IllegalArgumentException("Wrong SIZE!");
+        if (cube.length != 6) throw new IllegalArgumentException("It's no cube!");
+        for (int[][] ints : cube) {
+            if (ints.length != size) throw new IllegalArgumentException("It's no cube!");
+            for (int[] anInt : ints) {
+                if (anInt.length != size) throw new IllegalArgumentException("It's no cube!");
+            }
+        }
         this.sizeCube = size;
-        this.cubeNow = cube.clone();
-    }
-
-    public void setSide(CubeName nameSide, int[][] side) { // Установка своего кубика
-        this.cubeNow[nameSide.num] = side;
-    }
-
-    static private void rotateLeft(int[][] cube) { // Поворот квадратной матрицы в лево
-        int size = cube.length;
-        for (int j = 0; j < size / 2; j++) {
-            for (int k = j; k < size - j - 1; k++) {
-                int x = cube[j][k];
-                cube[j][k] = cube[k][size - j - 1];
-                cube[k][size - j - 1] = cube[size - j - 1][size - k - 1];
-                cube[size - j - 1][size - k - 1] = cube[size - k - 1][j];
-                cube[size - k - 1][j] = x;
+        this.cubeNow = new int[6][size][size];
+        for (int i = 0; i < cube.length; i++) {
+            for (int j = 0; j < cube[i].length; j++) {
+                this.cubeNow[i][j] = cube[i][j].clone();
             }
         }
     }
 
-    static private void rotateRight(int[][] cube) { // Поворот квадратной матрицы в право
-        int size = cube.length;
-        for (int j = 0; j < size / 2; j++) {
-            for (int k = j; k < size - j - 1; k++) {
-                int x = cube[j][k];
-                cube[j][k] = cube[size - k - 1][j];
-                cube[size - k - 1][j] = cube[size - j - 1][size - k - 1];
-                cube[size - j - 1][size - k - 1] = cube[k][size - j - 1];
-                cube[k][size - j - 1] = x;
-            }
-        }
-    }
+
+     private void rotateLeft(CubeName ... name) { // Поворот квадратной матрицы влево
+        int size = sizeCube;
+         for (CubeName cubename: name) {
+             int[][] cubeSide = getNumber(cubename);
+             for (int j = 0; j < size / 2; j++) {
+                 for (int k = j; k < size - j - 1; k++) {
+                     int x = cubeSide[j][k];
+                     cubeSide[j][k] = cubeSide[k][size - j - 1];
+                     cubeSide[k][size - j - 1] = cubeSide[size - j - 1][size - k - 1];
+                     cubeSide[size - j - 1][size - k - 1] = cubeSide[size - k - 1][j];
+                     cubeSide[size - k - 1][j] = x;
+                 }
+             }
+         }
+     }
+
+     private void rotateRight(CubeName ... name) { // Поворот квадратной матрицы вправо
+        int size = sizeCube;
+         for (CubeName cubeName : name) {
+             int[][] cubeSide = getNumber(cubeName);
+             for (int j = 0; j < size / 2; j++) {
+                 for (int k = j; k < size - j - 1; k++) {
+                     int x = cubeSide[j][k];
+                     cubeSide[j][k] = cubeSide[size - k - 1][j];
+                     cubeSide[size - k - 1][j] = cubeSide[size - j - 1][size - k - 1];
+                     cubeSide[size - j - 1][size - k - 1] = cubeSide[k][size - j - 1];
+                     cubeSide[k][size - j - 1] = x;
+                 }
+             }
+         }
+     }
 
     public enum Rotates {
         FRONT_RIGHT,
@@ -102,11 +115,9 @@ public final class Cube {
     }
 
 
-    private int[][] getNumber(CubeName name) {
-        return this.cubeNow[name.num];
-    }
+    private int[][] getNumber(CubeName name) { return this.cubeNow[name.num]; }
 
-    public void rotateBrink(CubeName name, int startIndex, int endIndex, boolean clock) {  // Поворот грани или центров
+    void rotateBrink(CubeName name, int startIndex, int endIndex, boolean clock) {  // Поворот грани или центров
         if (startIndex < 1 || startIndex > sizeCube || endIndex < 1 || endIndex > sizeCube)
             throw new IllegalArgumentException("WRONG Index :)");
         if (startIndex > endIndex) {
@@ -118,8 +129,8 @@ public final class Cube {
             case FRONT: {
                 if (clock) {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateRight(getNumber(CubeName.FRONT));// Поворот самой грани
-                        if (now == sizeCube) rotateLeft(getNumber(CubeName.BACK));
+                        if (now == 1) rotateRight(CubeName.FRONT);// Поворот самой грани
+                        if (now == sizeCube) rotateLeft(CubeName.BACK);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.DOWN)[now - 1][sizeCube - i - 1];
                             getNumber(CubeName.DOWN)[now - 1][sizeCube - i - 1] = getNumber(CubeName.RIGHT)[i][now - 1];
@@ -130,8 +141,8 @@ public final class Cube {
                     }
                 } else {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateLeft(getNumber(CubeName.FRONT)); // Поворот самой грани
-                        if (now == sizeCube) rotateRight(getNumber(CubeName.BACK));
+                        if (now == 1) rotateLeft(CubeName.FRONT); // Поворот самой грани
+                        if (now == sizeCube) rotateRight(CubeName.BACK);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.DOWN)[now - 1][sizeCube - i - 1];
                             getNumber(CubeName.DOWN)[now - 1][sizeCube - i - 1] = getNumber(CubeName.LEFT)[sizeCube - i - 1][sizeCube - now];
@@ -147,8 +158,8 @@ public final class Cube {
             case RIGHT: {
                 if (clock) {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateRight(getNumber(CubeName.RIGHT));
-                        if (now == sizeCube) rotateLeft(getNumber(CubeName.LEFT));
+                        if (now == 1) rotateRight(CubeName.RIGHT);
+                        if (now == sizeCube) rotateLeft(CubeName.LEFT);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.DOWN)[i][sizeCube - now];
                             getNumber(CubeName.DOWN)[i][sizeCube - now] = getNumber(CubeName.BACK)[sizeCube - i - 1][now - 1];
@@ -159,8 +170,8 @@ public final class Cube {
                     }
                 } else {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateLeft(this.cubeNow[CubeName.RIGHT.num]);
-                        if (now == sizeCube) rotateRight(this.cubeNow[CubeName.LEFT.num]);
+                        if (now == 1) rotateLeft(CubeName.RIGHT);
+                        if (now == sizeCube) rotateRight(CubeName.LEFT);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.FRONT)[i][sizeCube - now];
                             getNumber(CubeName.FRONT)[i][sizeCube - now] = getNumber(CubeName.UP)[i][sizeCube - now];
@@ -176,8 +187,8 @@ public final class Cube {
             case LEFT: {
                 if (clock) {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateRight(getNumber(CubeName.LEFT));
-                        if (now == sizeCube) rotateLeft(getNumber(CubeName.RIGHT));
+                        if (now == 1) rotateRight(CubeName.LEFT);
+                        if (now == sizeCube) rotateLeft(CubeName.RIGHT);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.FRONT)[i][now - 1];
                             getNumber(CubeName.FRONT)[i][now - 1] = getNumber(CubeName.UP)[i][now - 1];
@@ -188,8 +199,8 @@ public final class Cube {
                     }
                 } else {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateLeft(getNumber(CubeName.LEFT));
-                        if (now == sizeCube) rotateRight(getNumber(CubeName.RIGHT));
+                        if (now == 1) rotateLeft(CubeName.LEFT);
+                        if (now == sizeCube) rotateRight(CubeName.RIGHT);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.FRONT)[i][now - 1];
                             getNumber(CubeName.FRONT)[i][now - 1] = getNumber(CubeName.DOWN)[i][now - 1];
@@ -205,8 +216,8 @@ public final class Cube {
             case UP: {
                 if (clock) {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateRight(getNumber(CubeName.UP));
-                        if (now == sizeCube) rotateLeft(getNumber(CubeName.DOWN));
+                        if (now == 1) rotateRight(CubeName.UP);
+                        if (now == sizeCube) rotateLeft(CubeName.DOWN);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = cubeNow[CubeName.FRONT.num][now - 1][i];
                             getNumber(CubeName.FRONT)[now - 1][i] = getNumber(CubeName.RIGHT)[now - 1][i];
@@ -217,8 +228,8 @@ public final class Cube {
                     }
                 } else {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateLeft(getNumber(CubeName.UP));
-                        if (now == sizeCube) rotateRight(getNumber(CubeName.DOWN));
+                        if (now == 1) rotateLeft(CubeName.UP);
+                        if (now == sizeCube) rotateRight(CubeName.DOWN);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.FRONT)[now - 1][i];
                             getNumber(CubeName.FRONT)[now - 1][i] = getNumber(CubeName.LEFT)[now - 1][i];
@@ -234,8 +245,8 @@ public final class Cube {
             case DOWN: {
                 if (clock) {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateRight(getNumber(CubeName.DOWN));
-                        if (now == sizeCube) rotateLeft(getNumber(CubeName.UP));
+                        if (now == 1) rotateRight(CubeName.DOWN);
+                        if (now == sizeCube) rotateLeft(CubeName.UP);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.FRONT)[sizeCube - now][i];
                             getNumber(CubeName.FRONT)[sizeCube - now][i] = getNumber(CubeName.LEFT)[sizeCube - now][i];
@@ -246,8 +257,8 @@ public final class Cube {
                     }
                 } else {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateLeft(getNumber(CubeName.DOWN));
-                        if (now == sizeCube) rotateRight(getNumber(CubeName.UP));
+                        if (now == 1) rotateLeft(CubeName.DOWN);
+                        if (now == sizeCube) rotateRight(CubeName.UP);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.FRONT)[sizeCube - now][i];
                             getNumber(CubeName.FRONT)[sizeCube - now][i] = getNumber(CubeName.RIGHT)[sizeCube - now][i];
@@ -259,12 +270,11 @@ public final class Cube {
                 }
                 break;
             }
-
             case BACK: {
                 if (clock) {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateRight(getNumber(CubeName.BACK));
-                        if (now == sizeCube) rotateLeft(getNumber(CubeName.FRONT));
+                        if (now == 1) rotateRight(CubeName.BACK);
+                        if (now == sizeCube) rotateLeft(CubeName.FRONT);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.DOWN)[sizeCube - now][sizeCube - i - 1];
                             getNumber(CubeName.DOWN)[sizeCube - now][sizeCube - i - 1] = getNumber(CubeName.LEFT)[sizeCube - i - 1][now - 1];
@@ -275,8 +285,8 @@ public final class Cube {
                     }
                 } else {
                     for (int now = startIndex; now <= endIndex; now++) {
-                        if (now == 1) rotateLeft(getNumber(CubeName.BACK));
-                        if (now == sizeCube) rotateRight(getNumber(CubeName.FRONT));
+                        if (now == 1) rotateLeft(CubeName.BACK);
+                        if (now == sizeCube) rotateRight(CubeName.FRONT);
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.DOWN)[sizeCube - now][sizeCube - i - 1];
                             getNumber(CubeName.DOWN)[sizeCube - now][sizeCube - i - 1] = getNumber(CubeName.RIGHT)[i][sizeCube - now];
@@ -291,36 +301,31 @@ public final class Cube {
         }
     }
 
-    public void rotateCubeTo(Rotates move) {  // Поворот куба
+    void rotateCubeTo(Rotates move) {  // Поворот куба
         switch (move) {
             case DOWN: {
-                int x[][] = cubeNow[CubeName.FRONT.num];
+                int[][] x = cubeNow[CubeName.FRONT.num];
                 cubeNow[CubeName.FRONT.num] = cubeNow[CubeName.DOWN.num];
                 cubeNow[CubeName.DOWN.num] = cubeNow[CubeName.BACK.num];
                 cubeNow[CubeName.BACK.num] = cubeNow[CubeName.UP.num];
                 cubeNow[CubeName.UP.num] = x;
 
-                rotateLeft(getNumber(CubeName.LEFT)); //90
+                rotateLeft(CubeName.LEFT); //90
 
-                rotateRight(getNumber(CubeName.RIGHT)); //90
+                rotateRight(CubeName.RIGHT, CubeName.BACK, CubeName.BACK, CubeName.DOWN, CubeName.DOWN); //90
 
-                rotateRight(getNumber(CubeName.BACK)); //180
-                rotateRight(getNumber(CubeName.BACK));
-
-                rotateRight(getNumber(CubeName.DOWN)); //180
-                rotateRight(getNumber(CubeName.DOWN));
                 break;
             }
             case RIGHT: {
-                int x[][] = cubeNow[CubeName.FRONT.num];
+                int[][] x = cubeNow[CubeName.FRONT.num];
                 cubeNow[CubeName.FRONT.num] = cubeNow[CubeName.RIGHT.num];
                 cubeNow[CubeName.RIGHT.num] = cubeNow[CubeName.BACK.num];
                 cubeNow[CubeName.BACK.num] = cubeNow[CubeName.LEFT.num];
                 cubeNow[CubeName.LEFT.num] = x;
 
-                rotateRight(getNumber(CubeName.UP)); //90
+                rotateRight(CubeName.UP); //90
 
-                rotateLeft(getNumber(CubeName.DOWN)); //90
+                rotateLeft(CubeName.DOWN); //90
                 break;
             }
             case LEFT: {
@@ -330,9 +335,9 @@ public final class Cube {
                 cubeNow[CubeName.BACK.num] = cubeNow[CubeName.RIGHT.num];
                 cubeNow[CubeName.RIGHT.num] = x;
 
-                rotateLeft(getNumber(CubeName.UP)); //90
+                rotateLeft(CubeName.UP); //90
 
-                rotateRight(getNumber(CubeName.DOWN)); //90
+                rotateRight(CubeName.DOWN); //90
                 break;
             }
             case UP: {
@@ -342,15 +347,10 @@ public final class Cube {
                 cubeNow[CubeName.BACK.num] = cubeNow[CubeName.DOWN.num];
                 cubeNow[CubeName.DOWN.num] = x;
 
-                rotateRight(getNumber(CubeName.LEFT)); //90
+                rotateRight(CubeName.LEFT, CubeName.UP, CubeName.UP, CubeName.BACK, CubeName.BACK); //90
 
-                rotateLeft(getNumber(CubeName.RIGHT)); //90
+                rotateLeft(CubeName.RIGHT); //90
 
-                rotateRight(getNumber(CubeName.UP)); //180
-                rotateRight(getNumber(CubeName.UP));
-
-                rotateRight(getNumber(CubeName.BACK)); //180
-                rotateRight(getNumber(CubeName.BACK));
                 break;
             }
             case FRONT_RIGHT: {
@@ -360,17 +360,9 @@ public final class Cube {
                 cubeNow[CubeName.UP.num] = cubeNow[CubeName.LEFT.num];
                 cubeNow[CubeName.LEFT.num] = x;
 
-                rotateRight(getNumber(CubeName.FRONT)); //90
+                rotateRight(CubeName.FRONT, CubeName.RIGHT, CubeName.LEFT, CubeName.UP, CubeName.DOWN); //90
 
-                rotateRight(getNumber(CubeName.RIGHT));
-
-                rotateRight(getNumber(CubeName.LEFT));
-
-                rotateRight(getNumber(CubeName.UP));
-
-                rotateRight(getNumber(CubeName.DOWN));
-
-                rotateLeft(getNumber(CubeName.BACK));
+                rotateLeft(CubeName.BACK);
                 break;
             }
             case FRONT_LEFT: {
@@ -380,17 +372,9 @@ public final class Cube {
                 cubeNow[CubeName.UP.num] = cubeNow[CubeName.RIGHT.num];
                 cubeNow[CubeName.RIGHT.num] = x;
 
-                rotateLeft(getNumber(CubeName.FRONT)); //90
+                rotateLeft(CubeName.FRONT, CubeName.RIGHT, CubeName.LEFT, CubeName.UP, CubeName.DOWN); //90
 
-                rotateLeft(getNumber(CubeName.RIGHT));
-
-                rotateLeft(getNumber(CubeName.LEFT));
-
-                rotateLeft(getNumber(CubeName.UP));
-
-                rotateLeft(getNumber(CubeName.DOWN));
-
-                rotateRight(getNumber(CubeName.BACK));
+                rotateRight(CubeName.BACK);
             }
         }
     }
@@ -400,46 +384,45 @@ public final class Cube {
     }
 
     public int[][][] getCubeNow() {  // Выводит сам куб
-        return cubeNow.clone();
-    }
-
-    static private int search(int[] arr, int key){
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == key) return i;
+        int[][][] cube = new int[6][sizeCube][sizeCube];
+        for (int i = 0; i < cube.length; i++) {
+            for (int j = 0; j < cube[i].length; j++) {
+                cube[i][j] = cubeNow[i][j].clone();
+            }
         }
-        return -1;
+        return cube;
     }
-
 
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) throw new IllegalArgumentException("null");
         if (this == obj) return true;
         if (!(obj instanceof Cube)) return false;
         Cube other = (Cube) obj;
         if (other.sizeCube != sizeCube) return false;
-        boolean res1, res2;
-        boolean coincides = false;
+        int[][][] cubeArr = new int[6][sizeCube][sizeCube];
+        for (int i = 0; i < this.cubeNow.length; i++) {
+            for (int j = 0; j < this.cubeNow[i].length; j++) {
+                cubeArr[i][j] = this.cubeNow[i][j].clone();
+            }
+        }
+        Cube cube = new Cube(sizeCube, cubeArr);
+        boolean res = false;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
-                    res1 = true;
                     for (int m = 0; m < 6; m++) {
-                        res2 = true;
-                        for (int ii = 0; ii < sizeCube; ii++) {
-                                res2 &= Arrays.equals(cubeNow[m][ii], other.cubeNow[m][ii]);
-                        }
-                        res1 &= res2;
+                        res = Arrays.deepEquals(cube.cubeNow[m], other.cubeNow[m]);
                     }
-                    coincides |=res1;
-                    if (coincides) return true;
-                    other.rotateCubeTo(Rotates.LEFT);
+                    if (res) return true;
+                    cube.rotateCubeTo(Rotates.LEFT);
                 }
-                other.rotateCubeTo(Rotates.FRONT_RIGHT);
+                cube.rotateCubeTo(Rotates.FRONT_RIGHT);
             }
-            other.rotateCubeTo(Rotates.UP);
-            other.rotateCubeTo(Rotates.FRONT_RIGHT);
-            other.rotateCubeTo(Rotates.FRONT_RIGHT);
+            cube.rotateCubeTo(Rotates.UP);
+            cube.rotateCubeTo(Rotates.FRONT_RIGHT);
+            cube.rotateCubeTo(Rotates.FRONT_RIGHT);
         }
         return false;
     }
@@ -502,7 +485,5 @@ public final class Cube {
     }
 
     @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(cubeNow);
-    }
+    public int hashCode() { return Arrays.deepHashCode(cubeNow); }
 }
