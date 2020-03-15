@@ -25,7 +25,7 @@ public final class Cube {
 
     private final int[][][] cubeNow;
 
-    Cube(int size) { // Конструктор
+    public Cube(int size) { // Конструктор
         if (size < 0) throw new IllegalArgumentException("Wrong SIZE!");
         this.sizeCube = size;
         this.cubeNow = new int[6][size][size];
@@ -39,7 +39,8 @@ public final class Cube {
         }
     }
 
-    Cube(int size, int[][][] cube) {
+    public Cube(int size, int[][][] cube) {
+        int[][][] cubeNow1;
         if (size < 0) throw new IllegalArgumentException("Wrong SIZE!");
         if (cube.length != 6) throw new IllegalArgumentException("It's no cube!");
         for (int[][] ints : cube) {
@@ -49,45 +50,51 @@ public final class Cube {
             }
         }
         this.sizeCube = size;
-        this.cubeNow = new int[6][size][size];
-        for (int i = 0; i < cube.length; i++) {
+        cubeNow1 = cloneCube(size, cube);
+        this.cubeNow = cubeNow1;
+    }
+
+    private int[][][] cloneCube(int size, int[][][] cube) {
+        int[][][] cloneCube = new int[6][size][size];
+        for (int i = 0; i < 6; i++) {
             for (int j = 0; j < cube[i].length; j++) {
-                this.cubeNow[i][j] = cube[i][j].clone();
+                cloneCube[i][j] = cube[i][j].clone();
+            }
+        }
+        return cloneCube;
+    }
+
+    private void rotateLeft(CubeName... name) { // Поворот квадратной матрицы влево
+        int size = sizeCube;
+        for (CubeName cubename : name) {
+            int[][] cubeSide = getNumber(cubename);
+            for (int j = 0; j < size / 2; j++) {
+                for (int k = j; k < size - j - 1; k++) {
+                    int x = cubeSide[j][k];
+                    cubeSide[j][k] = cubeSide[k][size - j - 1];
+                    cubeSide[k][size - j - 1] = cubeSide[size - j - 1][size - k - 1];
+                    cubeSide[size - j - 1][size - k - 1] = cubeSide[size - k - 1][j];
+                    cubeSide[size - k - 1][j] = x;
+                }
             }
         }
     }
 
-     private void rotateLeft(CubeName ... name) { // Поворот квадратной матрицы влево
+    private void rotateRight(CubeName... name) { // Поворот квадратной матрицы вправо
         int size = sizeCube;
-         for (CubeName cubename: name) {
-             int[][] cubeSide = getNumber(cubename);
-             for (int j = 0; j < size / 2; j++) {
-                 for (int k = j; k < size - j - 1; k++) {
-                     int x = cubeSide[j][k];
-                     cubeSide[j][k] = cubeSide[k][size - j - 1];
-                     cubeSide[k][size - j - 1] = cubeSide[size - j - 1][size - k - 1];
-                     cubeSide[size - j - 1][size - k - 1] = cubeSide[size - k - 1][j];
-                     cubeSide[size - k - 1][j] = x;
-                 }
-             }
-         }
-     }
-
-     private void rotateRight(CubeName ... name) { // Поворот квадратной матрицы вправо
-        int size = sizeCube;
-         for (CubeName cubeName : name) {
-             int[][] cubeSide = getNumber(cubeName);
-             for (int j = 0; j < size / 2; j++) {
-                 for (int k = j; k < size - j - 1; k++) {
-                     int x = cubeSide[j][k];
-                     cubeSide[j][k] = cubeSide[size - k - 1][j];
-                     cubeSide[size - k - 1][j] = cubeSide[size - j - 1][size - k - 1];
-                     cubeSide[size - j - 1][size - k - 1] = cubeSide[k][size - j - 1];
-                     cubeSide[k][size - j - 1] = x;
-                 }
-             }
-         }
-     }
+        for (CubeName cubeName : name) {
+            int[][] cubeSide = getNumber(cubeName);
+            for (int j = 0; j < size / 2; j++) {
+                for (int k = j; k < size - j - 1; k++) {
+                    int x = cubeSide[j][k];
+                    cubeSide[j][k] = cubeSide[size - k - 1][j];
+                    cubeSide[size - k - 1][j] = cubeSide[size - j - 1][size - k - 1];
+                    cubeSide[size - j - 1][size - k - 1] = cubeSide[k][size - j - 1];
+                    cubeSide[k][size - j - 1] = x;
+                }
+            }
+        }
+    }
 
     public enum Rotates {
         FRONT_RIGHT,
@@ -109,14 +116,18 @@ public final class Cube {
 
         private int num;
 
-        CubeName(int i) { num = i; }
+        CubeName(int i) {
+            num = i;
+        }
 
     }
 
 
-    private int[][] getNumber(CubeName name) { return this.cubeNow[name.num]; }
+    private int[][] getNumber(CubeName name) {
+        return this.cubeNow[name.num];
+    }
 
-    void rotateBrink(CubeName name, int startIndex, int endIndex, boolean clock) {  // Поворот грани или центров
+    public void rotateBrink(CubeName name, int startIndex, int endIndex, boolean clock) {  // Поворот грани или центров
         if (startIndex < 1 || startIndex > sizeCube || endIndex < 1 || endIndex > sizeCube)
             throw new IllegalArgumentException("WRONG Index :)");
         if (startIndex > endIndex) {
@@ -174,7 +185,7 @@ public final class Cube {
                         for (int i = 0; i < sizeCube; i++) {
                             int x = getNumber(CubeName.FRONT)[i][sizeCube - now];
                             getNumber(CubeName.FRONT)[i][sizeCube - now] = getNumber(CubeName.UP)[i][sizeCube - now];
-                            getNumber(CubeName.UP)[i][sizeCube - now] = getNumber(CubeName.BACK)[sizeCube - i -1][now - 1];
+                            getNumber(CubeName.UP)[i][sizeCube - now] = getNumber(CubeName.BACK)[sizeCube - i - 1][now - 1];
                             getNumber(CubeName.BACK)[sizeCube - i - 1][now - 1] = getNumber(CubeName.DOWN)[i][sizeCube - now];
                             getNumber(CubeName.DOWN)[i][sizeCube - now] = x;
                         }
@@ -300,7 +311,7 @@ public final class Cube {
         }
     }
 
-    void rotateCubeTo(Rotates move) {  // Поворот куба
+    public void rotateCubeTo(Rotates move) {  // Поворот куба
         switch (move) {
             case DOWN: {
                 int[][] x = cubeNow[CubeName.FRONT.num];
@@ -383,30 +394,18 @@ public final class Cube {
     }
 
     public int[][][] getCubeNow() {  // Выводит сам куб
-        int[][][] cube = new int[6][sizeCube][sizeCube];
-        for (int i = 0; i < cube.length; i++) {
-            for (int j = 0; j < cube[i].length; j++) {
-                cube[i][j] = cubeNow[i][j].clone();
-            }
-        }
-        return cube;
+        return cloneCube(this.sizeCube, this.cubeNow);
     }
 
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) throw new IllegalArgumentException("null");
+        if (obj == null) return false;
         if (this == obj) return true;
         if (!(obj instanceof Cube)) return false;
         Cube other = (Cube) obj;
         if (other.sizeCube != sizeCube) return false;
-        int[][][] cubeArr = new int[6][sizeCube][sizeCube];
-        for (int i = 0; i < this.cubeNow.length; i++) {
-            for (int j = 0; j < this.cubeNow[i].length; j++) {
-                cubeArr[i][j] = this.cubeNow[i][j].clone();
-            }
-        }
-        Cube cube = new Cube(sizeCube, cubeArr);
+        Cube cube = new Cube(this.sizeCube, this.cubeNow);
         boolean res = false;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
@@ -472,17 +471,29 @@ public final class Cube {
         return text.toString();
     }
 
-    public void toStringOneBrink(CubeName name) {  // Просмотр одной стороны
+    public String toStringOneBrink(CubeName name) {  // Просмотр одной стороны
         StringBuilder text = new StringBuilder(" ".repeat(sizeCube + 1) + name).append("\n");
         for (int j = 0; j < sizeCube; j++) {
             for (int k = 0; k < sizeCube; k++) {
-                text.append(" ").append(color[cubeNow[name.num][j][k]], 0, 12);
+                text.append(" ").append(color[cubeNow[name.num][j][k]]);
             }
             text.append("\n");
         }
-        System.out.println(text);
+        return text.toString();
     }
 
     @Override
-    public int hashCode() { return Arrays.deepHashCode(cubeNow); }
+    public int hashCode() {
+        final int prime = 31;
+        int hashCode = 1;
+        for (int m = 0; m < 6; m++) {
+            for (int i = 0; i < sizeCube; i++) {
+                for (int j = 0; j < sizeCube; j++) {
+                    hashCode *= prime;
+                    hashCode += this.cubeNow[m][i][j];
+                }
+            }
+        }
+        return hashCode;
+    }
 }
