@@ -307,6 +307,7 @@ public final class Cube {
                     }
                 }
                 break;
+
             }
         }
     }
@@ -406,13 +407,10 @@ public final class Cube {
         Cube other = (Cube) obj;
         if (other.sizeCube != sizeCube) return false;
         Cube cube = new Cube(this.sizeCube, this.cubeNow);
-        boolean res = false;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
-                    for (int m = 0; m < 6; m++) {
-                        res = Arrays.deepEquals(cube.cubeNow[m], other.cubeNow[m]);
-                    }
+                    boolean res = Arrays.deepEquals(cube.cubeNow, other.cubeNow);
                     if (res) return true;
                     cube.rotateCubeTo(Rotates.LEFT);
                 }
@@ -484,16 +482,6 @@ public final class Cube {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int hashCode = 1;
-        for (int m = 0; m < 6; m++) {
-            for (int i = 0; i < sizeCube; i++) {
-                for (int j = 0; j < sizeCube; j++) {
-                    hashCode *= prime;
-                    hashCode += this.cubeNow[m][i][j];
-                }
-            }
-        }
-        return hashCode;
+        return Arrays.deepHashCode(cubeNow);
     }
 }
